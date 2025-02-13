@@ -12,8 +12,8 @@ cd BruteFTP/BruteFTP
 ```
 ls
 ```
-```
 python bruteftp.py
+```
 ```
 
 
