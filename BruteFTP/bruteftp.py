@@ -62,6 +62,7 @@ def thread(host, port, user, passwords):
         t.join()
 
 if __name__ == "__main__":
+    logo()
     host = input(f"[{cyan}+{clear}] Host {cyan}:{clear} ")
     port = int(input(f"[{cyan}+{clear}] Port {cyan}:{clear} "))
     user = input(f"[{cyan}*{clear}] Username {cyan}:{clear} ")
