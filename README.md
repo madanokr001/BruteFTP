@@ -10,10 +10,11 @@ git clone https://github.com/madanokr001/BruteFTP.git
 ```
 cd BruteFTP/BruteFTP
 ```
+```
 ls
 ```
-python bruteftp.py
 ```
+python bruteftp.py
 ```
 
 
